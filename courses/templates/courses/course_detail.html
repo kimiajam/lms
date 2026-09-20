@@ -1,0 +1,13 @@
+<h1>{{ course.title }}</h1>
+
+<p>{{ course.description }}</p>
+
+<h2>Lessons</h2>
+
+{% for lesson in lessons %}
+    <a href="{% url 'lesson_detail' lesson.id %}">
+        {{ lesson.title }}
+    </a>
+{% empty %}
+    <p>No lessons available.</p>
+{% endfor %}
