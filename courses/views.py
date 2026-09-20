@@ -2,6 +2,10 @@ from django.shortcuts import get_object_or_404, render
 from .models import Course, Lesson
 from django.contrib.auth.decorators import login_required
 
+def home(request):
+    return render(request, 'courses/home.html')
+
+
 @login_required
 def course_list(request):
     courses = Course.objects.all()
