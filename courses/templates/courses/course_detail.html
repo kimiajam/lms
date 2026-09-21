@@ -1,35 +1,86 @@
 {% extends 'courses/base.html' %}
+
 {% block content %}
 
-<h1>{{ course.title }}</h1>
+<section class="course-detail">
 
-<p>{{ course.description }}</p>
+    <div class="course-detail-header">
+        <span class="hero-label">COURSE</span>
 
-{% if enrolled %}
+        <h1>{{ course.title }}</h1>
 
-    <p>You are enrolled in this course.</p>
-
-    <h2>Lessons</h2>
-
-    {% for lesson in lessons %}
-        <p>
-            <a href="{% url 'lesson_detail' lesson.id %}">
-                {{ lesson.title }}
-            </a>
+        <p class="course-description">
+            {{ course.description }}
         </p>
-    {% empty %}
-        <p>No lessons available.</p>
-    {% endfor %}
 
-{% else %}
+        {% if enrolled %}
 
-    <p>You are not enrolled in this course.</p>
+            <div class="enrolled-badge">
+                ✓ You are enrolled in this course
+            </div>
 
-    <form method="POST" action="{% url 'enroll' course.id %}">
-        {% csrf_token %}
-        <button type="submit">Enroll</button>
-    </form>
+        {% else %}
 
-{% endif %}
+            {% if user.is_authenticated %}
+
+                <form method="POST" action="{% url 'enroll' course.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="enroll-button">
+                        Enroll Now
+                    </button>
+                </form>
+
+            {% else %}
+
+                <a href="{% url 'login' %}" class="enroll-button">
+                    Login to Enroll
+                </a>
+
+            {% endif %}
+
+        {% endif %}
+
+    </div>
+
+
+    {% if enrolled %}
+
+        <div class="lessons-section">
+
+            <div class="section-title">
+                <span>COURSE CONTENT</span>
+                <h2>Lessons</h2>
+            </div>
+
+            <div class="lesson-list">
+
+                {% for lesson in lessons %}
+
+                    <a href="{% url 'lesson_detail' lesson.id %}" class="lesson-card">
+
+                        <span class="lesson-number">
+                            {{ forloop.counter|stringformat:"02d" }}
+                        </span>
+
+                        <div>
+                            <h3>{{ lesson.title }}</h3>
+                            <p>Start lesson →</p>
+                        </div>
+
+                    </a>
+
+                {% empty %}
+
+                    <p>No lessons available.</p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</section>
 
 {% endblock %}

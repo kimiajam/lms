@@ -1,8 +1,25 @@
 {% extends 'courses/base.html' %}
+
 {% block content %}
 
-<h1>{{ lesson.title }}</h1>
+<article class="lesson-page">
 
-<p>{{ lesson.content }}</p>
+    <div class="lesson-meta">
+        <span>LESSON</span>
+        <span>•</span>
+        <span>{{ lesson.course.title }}</span>
+    </div>
+
+    <h1>{{ lesson.title }}</h1>
+
+    <div class="lesson-content">
+        {{ lesson.content|linebreaks }}
+    </div>
+
+    <a href="{% url 'course_detail' lesson.course.id %}" class="back-link">
+        ← Back to Course
+    </a>
+
+</article>
 
 {% endblock %}

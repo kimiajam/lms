@@ -19,22 +19,25 @@ def enroll(request, course_id):
 
     return redirect('course_list')
 
-@login_required
 def course_list(request):
     courses = Course.objects.all()
     return render(request, 'courses/course_list.html', {'courses': courses})
 
 
-@login_required
 def course_detail(request, course_id):
     course = get_object_or_404(Course, id=course_id)
 
-    enrolled = Enrollment.objects.filter(
-        user=request.user,
-        course=course
-    ).exists()
+    enrolled = False
+    lessons = []
 
-    lessons = course.lesson_set.all() if enrolled else []
+    if request.user.is_authenticated:
+        enrolled = Enrollment.objects.filter(
+            user=request.user,
+            course=course
+        ).exists()
+
+        if enrolled:
+            lessons = course.lesson_set.all()
 
     return render(
         request,
@@ -46,6 +49,7 @@ def course_detail(request, course_id):
         }
     )
 
+            
 @login_required
 def lesson_detail(request, lesson_id):
     lesson = get_object_or_404(Lesson, id=lesson_id)
