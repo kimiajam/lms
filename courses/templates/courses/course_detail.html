@@ -25,9 +25,10 @@
 
     <p>You are not enrolled in this course.</p>
 
-    <a href="{% url 'enroll' course.id %}">
-        Enroll
-    </a>
+    <form method="POST" action="{% url 'enroll' course.id %}">
+        {% csrf_token %}
+        <button type="submit">Enroll</button>
+    </form>
 
 {% endif %}
 

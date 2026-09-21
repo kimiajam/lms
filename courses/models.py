@@ -23,6 +23,13 @@ class Enrollment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'course'],
+                name='unique_user_course'
+            )
+        ]
+
     def __str__(self):
         return f'{self.user.username} - {self.course.title}'
-

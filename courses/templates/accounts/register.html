@@ -1,4 +1,14 @@
+{% extends 'courses/base.html' %}
+
+{% block content %}
+
 <h1>Register</h1>
+
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
 
 <form method="POST">
     {% csrf_token %}
@@ -8,3 +18,5 @@
 
     <button type="submit">Register</button>
 </form>
+
+{% endblock %}

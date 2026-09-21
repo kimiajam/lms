@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 
 def register(request):
@@ -8,11 +9,16 @@ def register(request):
         username = request.POST['username']
         password = request.POST['password']
 
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists.')
+            return render(request, 'accounts/register.html')
+
         User.objects.create_user(
             username=username,
             password=password
         )
 
+        messages.success(request, 'Account created successfully.')
         return redirect('login')
 
     return render(request, 'accounts/register.html')
@@ -31,6 +37,8 @@ def user_login(request):
         if user is not None:
             login(request, user)
             return redirect('course_list')
+
+        messages.error(request, 'Invalid username or password.')
 
     return render(request, 'accounts/login.html')
 
